@@ -719,6 +719,8 @@ Thank you for the wonderful time.`,
           initCarousel();
           // Update HTML lang attribute
           document.documentElement.lang = newLang === "ja" ? "ja" : "en";
+          // Scroll to top
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
       }
 
@@ -840,6 +842,8 @@ Thank you for the wonderful time.`,
         if (index >= 0 && index < slides.length) {
           currentSlide = index;
           updateCarousel();
+          // Scroll to top
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
       }
 
@@ -849,6 +853,8 @@ Thank you for the wonderful time.`,
         if (currentSlide < slides.length - 1) {
           currentSlide++;
           updateCarousel();
+          // Scroll to top
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
       }
 
@@ -857,6 +863,8 @@ Thank you for the wonderful time.`,
         if (currentSlide > 0) {
           currentSlide--;
           updateCarousel();
+          // Scroll to top
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
       }
 
