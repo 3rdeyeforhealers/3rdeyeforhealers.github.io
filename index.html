@@ -206,6 +206,17 @@
         outline-offset: 2px;
       }
 
+      .carousel-indicator[aria-disabled="true"] {
+        background: #667eea;
+        transform: scale(1.2);
+        cursor: default;
+      }
+
+      .carousel-indicator[aria-disabled="true"]:hover {
+        background: #667eea;
+        border-color: #667eea;
+      }
+
       .sr-only {
         position: absolute;
         width: 1px;
@@ -313,10 +324,16 @@
       <div
         class="carousel-wrapper"
         role="region"
+        aria-roledescription="carousel"
         aria-label="Testimonials carousel"
       >
         <div class="carousel-container">
-          <div class="carousel-track" id="carouselTrack">
+          <div
+            class="carousel-track"
+            id="carouselTrack"
+            aria-live="polite"
+            aria-atomic="false"
+          >
             <!-- Testimonials will be dynamically inserted here -->
           </div>
         </div>
@@ -334,11 +351,12 @@
             class="carousel-status"
             id="carouselStatus"
             aria-live="polite"
-            aria-atomic="true"
+            aria-atomic="false"
           ></div>
           <div
             class="carousel-indicators"
             id="indicators"
+            role="group"
             aria-label="Testimonial navigation"
           ></div>
           <button
@@ -667,6 +685,7 @@ Thank you for the wonderful time.`,
           pageTitle: "Third Eye for Healers - Testimonials",
           testimonialStatus: (current, total) =>
             `Testimonial ${current} out of ${total}`,
+          testimonialLabel: (current, total) => `${current} of ${total}`,
         },
         ja: {
           selectLanguage: "言語を選択",
@@ -677,6 +696,7 @@ Thank you for the wonderful time.`,
           pageTitle: "第三の目ヒーラー - お客様の声",
           testimonialStatus: (current, total) =>
             `お客様の声 ${current} / ${total}`,
+          testimonialLabel: (current, total) => `${current} / ${total}`,
         },
       };
 
@@ -801,7 +821,18 @@ Thank you for the wonderful time.`,
         testimonialsData.forEach((testimonial, index) => {
           const slide = document.createElement("div");
           slide.className = `testimonial-slide ${index === 0 ? "active" : ""}`;
+          slide.setAttribute("role", "group");
+          slide.setAttribute("aria-roledescription", "slide");
           slide.setAttribute("aria-hidden", index !== 0 ? "true" : "false");
+
+          // Set accessible label for slide with position information
+          const slideTranslations = uiTranslations[currentLang];
+          const slideLabel = slideTranslations.testimonialLabel(
+            index + 1,
+            testimonialsData.length
+          );
+          slide.setAttribute("aria-label", slideLabel);
+          slide.setAttribute("id", `slide-${index}`);
 
           let html = `<div class="testimonial-content">
                     <h2 class="testimonial-title">${testimonial.title}</h2>`;
@@ -853,12 +884,17 @@ Thank you for the wonderful time.`,
           indicator.className = `carousel-indicator ${
             index === 0 ? "active" : ""
           }`;
-          indicator.setAttribute(
-            "aria-selected",
-            index === 0 ? "true" : "false"
+          const indicatorTranslations = uiTranslations[currentLang];
+          const indicatorLabel = indicatorTranslations.testimonialLabel(
+            index + 1,
+            testimonialsData.length
           );
+          indicator.setAttribute("aria-label", indicatorLabel);
           indicator.setAttribute("aria-controls", `slide-${index}`);
           indicator.setAttribute("id", `indicator-${index}`);
+          if (index === 0) {
+            indicator.setAttribute("aria-disabled", "true");
+          }
           indicator.addEventListener("click", () => goToSlide(index));
           indicators.appendChild(indicator);
         });
@@ -883,7 +919,8 @@ Thank you for the wonderful time.`,
         indicators.forEach((indicator, index) => {
           const isActive = index === currentSlide;
           indicator.classList.toggle("active", isActive);
-          indicator.setAttribute("aria-selected", isActive ? "true" : "false");
+          // Update aria-disabled for grouped carousel pattern
+          indicator.setAttribute("aria-disabled", isActive ? "true" : "false");
         });
 
         // Update status for screen readers
@@ -893,6 +930,15 @@ Thank you for the wonderful time.`,
         const visualText = `${current} / ${total}`;
         const screenReaderText = translations.testimonialStatus(current, total);
         status.innerHTML = `<p><span aria-hidden="true">${visualText}</span> <span class="sr-only">${screenReaderText}</span></p>`;
+
+        // Update slide aria-labels when slide changes
+        slides.forEach((slide, slideIndex) => {
+          const slideLabel = translations.testimonialLabel(
+            slideIndex + 1,
+            total
+          );
+          slide.setAttribute("aria-label", slideLabel);
+        });
 
         // Update button states (never disabled since carousel loops)
         prevButton.disabled = false;
