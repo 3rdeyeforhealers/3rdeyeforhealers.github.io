@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Testimonials from Third Eye for Healers retreat participants"
+    />
     <title>Third Eye for Healers - Testimonials</title>
     <style>
       * {
@@ -46,8 +50,6 @@
 
       .carousel-track {
         display: flex;
-        transition: transform 0.5s ease-in-out;
-        will-change: transform;
       }
 
       .testimonial-slide {
@@ -120,11 +122,6 @@
 
       .testimonial-signature p:last-child {
         margin-bottom: 0;
-      }
-
-      .testimonial-emoji {
-        font-size: 1.2em;
-        margin-right: 8px;
       }
 
       .testimonial-signature {
@@ -310,7 +307,8 @@
         }
 
         .carousel-arrow,
-        .carousel-indicator {
+        .carousel-indicator,
+        .carousel-track {
           transition: none;
         }
       }
@@ -680,6 +678,12 @@ Thank you for the wonderful time.`,
       let currentLang = detectLanguage();
       let currentSlide = 0;
 
+      // Check if user prefers reduced motion (for RGESN optimization)
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      const scrollBehavior = prefersReducedMotion ? "auto" : "smooth";
+
       // Translations for UI elements (aria-labels and page title)
       const uiTranslations = {
         en: {
@@ -971,7 +975,7 @@ Thank you for the wonderful time.`,
           currentSlide = index;
           updateCarousel();
           // Scroll to top
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0, behavior: scrollBehavior });
           // Focus on the slide
           focusSlide();
         }
@@ -983,7 +987,7 @@ Thank you for the wonderful time.`,
         currentSlide = (currentSlide + 1) % slides.length;
         updateCarousel();
         // Scroll to top
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: scrollBehavior });
         // Focus on the new slide
         focusSlide();
       }
@@ -994,7 +998,7 @@ Thank you for the wonderful time.`,
         currentSlide = (currentSlide - 1 + slides.length) % slides.length;
         updateCarousel();
         // Scroll to top
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: scrollBehavior });
         // Focus on the new slide
         focusSlide();
       }
@@ -1048,8 +1052,8 @@ Thank you for the wonderful time.`,
           .getElementById("prevButton")
           .addEventListener("click", prevSlide);
 
-        // Keyboard navigation
-        document.addEventListener("keydown", handleKeyDown);
+        // Keyboard navigation (use passive listener where possible)
+        document.addEventListener("keydown", handleKeyDown, false);
 
         // Update HTML lang attribute based on detected language
         document.documentElement.lang = currentLang === "ja" ? "ja" : "en";
