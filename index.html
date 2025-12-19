@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Third Eye for Healers - Testimonials</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .container {
+        position: relative;
+        max-width: 900px;
+        width: 100%;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .carousel-wrapper {
+        position: relative;
+        background: #f8f9fa;
+      }
+
+      .carousel-container {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .carousel-track {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+        will-change: transform;
+      }
+
+      .testimonial-slide {
+        min-width: 100%;
+        padding: 60px 50px;
+        display: none;
+      }
+
+      .testimonial-slide.active {
+        display: block;
+      }
+
+      .testimonial-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .testimonial-title {
+        font-size: 2em;
+        margin-bottom: 30px;
+        color: #667eea;
+        font-weight: 600;
+      }
+
+      .testimonial-section {
+        margin-bottom: 30px;
+      }
+
+      .testimonial-section-title {
+        font-size: 1.3em;
+        margin-bottom: 15px;
+        color: #764ba2;
+        font-weight: 500;
+      }
+
+      .testimonial-section-title:empty {
+        display: none;
+      }
+
+      .testimonial-day {
+        font-size: 1.1em;
+        margin-bottom: 20px;
+        color: #555;
+        font-weight: 500;
+      }
+
+      .testimonial-text {
+        margin-bottom: 20px;
+        color: #444;
+        text-align: justify;
+      }
+
+      .testimonial-text p {
+        margin: 0 0 1em 0;
+      }
+
+      .testimonial-text p:last-child {
+        margin-bottom: 0;
+      }
+
+      .testimonial-signature p {
+        margin: 0 0 1em 0;
+      }
+
+      .testimonial-signature p:last-child {
+        margin-bottom: 0;
+      }
+
+      .testimonial-emoji {
+        font-size: 1.2em;
+        margin-right: 8px;
+      }
+
+      .testimonial-signature {
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 2px solid #e0e0e0;
+        font-style: italic;
+        color: #666;
+      }
+
+      .carousel-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px 50px;
+        background: white;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .carousel-arrow {
+        background: #667eea;
+        color: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        outline: none;
+      }
+
+      .carousel-arrow:hover {
+        background: #764ba2;
+        transform: scale(1.1);
+      }
+
+      .carousel-arrow:focus {
+        outline: 3px solid #ffd700;
+        outline-offset: 2px;
+      }
+
+      .carousel-arrow:active {
+        transform: scale(0.95);
+      }
+
+      .carousel-arrow:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .carousel-indicators {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .carousel-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid #667eea;
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        outline: none;
+      }
+
+      .carousel-indicator.active {
+        background: #667eea;
+        transform: scale(1.2);
+      }
+
+      .carousel-indicator:hover {
+        background: #764ba2;
+        border-color: #764ba2;
+      }
+
+      .carousel-indicator:focus {
+        outline: 3px solid #ffd700;
+        outline-offset: 2px;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      .carousel-status {
+        font-size: 0.9em;
+        color: #666;
+        margin: 0 20px;
+      }
+
+      .language-selector {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 10;
+      }
+
+      .language-selector label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .language-select {
+        background: white;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 0.95em;
+        color: #333;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s ease;
+        min-width: 120px;
+      }
+
+      .language-select:hover {
+        border-color: #764ba2;
+        background: #f8f9fa;
+      }
+
+      .language-select:focus {
+        outline: 3px solid #ffd700;
+        outline-offset: 2px;
+      }
+
+      @media (max-width: 768px) {
+        .testimonial-slide {
+          padding: 40px 30px;
+        }
+
+        .testimonial-title {
+          font-size: 1.5em;
+        }
+
+        .carousel-nav {
+          padding: 20px 30px;
+        }
+
+        .carousel-status {
+          display: none;
+        }
+
+        .language-selector {
+          top: 10px;
+          right: 10px;
+        }
+
+        .language-select {
+          font-size: 0.85em;
+          padding: 6px 10px;
+          min-width: 100px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .carousel-track {
+          transition: none;
+        }
+
+        .carousel-arrow,
+        .carousel-indicator {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="language-selector">
+        <label for="languageSelect" class="sr-only">Select language</label>
+        <select
+          id="languageSelect"
+          class="language-select"
+          aria-label="Select language"
+        >
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+        </select>
+      </div>
+      <div
+        class="carousel-wrapper"
+        role="region"
+        aria-label="Testimonials carousel"
+      >
+        <div class="carousel-container">
+          <div class="carousel-track" id="carouselTrack" role="list">
+            <!-- Testimonials will be dynamically inserted here -->
+          </div>
+        </div>
+        <div class="carousel-nav">
+          <button
+            class="carousel-arrow"
+            id="prevButton"
+            aria-label="Previous testimonial"
+            aria-controls="carouselTrack"
+            type="button"
+          >
+            <span aria-hidden="true">←</span>
+            <span class="sr-only">Previous testimonial</span>
+          </button>
+          <div
+            class="carousel-status"
+            id="carouselStatus"
+            aria-live="polite"
+            aria-atomic="true"
+          ></div>
+          <div
+            class="carousel-indicators"
+            id="indicators"
+            role="tablist"
+            aria-label="Testimonial navigation"
+          ></div>
+          <button
+            class="carousel-arrow"
+            id="nextButton"
+            aria-label="Next testimonial"
+            aria-controls="carouselTrack"
+            type="button"
+          >
+            <span aria-hidden="true">→</span>
+            <span class="sr-only">Next testimonial</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Testimonials data
+      const testimonials = {
+        en: [
+          {
+            title: "Opening the Third Eye — A Retreat to Release Mind and Body",
+            sections: [
+              {
+                title: "Reflections",
+                days: [
+                  {
+                    day: "🌿 Day 1",
+                    content: `I met the two of you in person for the first time, after only having seen you in photos before. Even though it was our first meeting, I felt no sense of awkwardness at all. Instead, there was a deep sense of familiarity and comfort, as if I were reuniting with old friends.
+
+That day, I experienced yoga at Yoko's home. Taking my lower back pain into careful consideration, she gently guided me through poses that were safe and comfortable for my body. Little by little, I felt both my mind and body begin to relax, and I was wrapped in a deep sense of peace.
+
+After that, we moved into the Third Eye Healing. During the healing session led by both of you, I naturally entered a deep meditative state. My head became very warm, my body shook twice, and I felt such a strong flow of energy that I almost collapsed—but Yoko gently supported me.
+
+When the healing ended, the turbulence within my heart quieted down, becoming calm and peaceful like a gentle sea. It was a mysterious yet warm sensation, as if my heart had suddenly become light.
+
+And quite remarkably, the lower back pain that had troubled me for so long had disappeared. I truly felt the deep connection between mind and body.`,
+                  },
+                  {
+                    day: "🌙 Day 2",
+                    content: `On the second day, we spent our time at an old traditional house called Isoyama-tei in Itako City. In the morning, we visited Kashima Shrine to center ourselves before heading there. Isoyama-tei was a very calm and beautiful place, and I personally fell in love with it.
+
+As the healing began, I once again entered a deep meditative state. When your healing started, the area around my head became hot and my body began to tremble. Then, I sensed something like a pillar of white light descending from above, accompanied by a powerful impact—almost as if something had been suddenly pulled out from my head.
+
+After that, I felt as though I were surrounded by a white membrane, encircled by orange, human-shaped lines of light. My breathing became very deep, and I found myself naturally letting out a low, resonant sound. I may have surprised you a little, but my consciousness itself was extremely calm and peaceful.
+
+When the healing ended, both my mind and body felt completely refreshed. It was such a mysterious experience that I found myself wondering, "What just happened?"
+
+I have always been quite sensitive, but this experience was truly special—so deep that it cannot be fully expressed in words.
+
+When I was asked, "Is there anything else you'd like to ask?" I felt that I had already received everything I needed.
+
+After returning home and reaching the next day, I felt as though my entire body was still wrapped in light, and even now, that gentle afterglow continues.`,
+                  },
+                ],
+                conclusion: `✨ Conclusion
+
+These two days were truly mysterious and unforgettable for me. Even now, I feel firmly grounded, with my senses sharper and clearer than ever.
+
+Yoko and Florent, thank you so much for taking such wonderful care of me over these two days. Thanks to you both, my mind and body were deeply healed, and I was given an invaluable experience unlike anything I had known before.
+
+Although I have always been sensitive, this kind of experience was entirely new to me, and my heart is filled with gratitude.
+
+I will treasure this encounter and carry it as a guiding center in my life going forward.
+
+Thank you from the bottom of my heart.`,
+                signature: `💐 A Message of Gratitude
+
+Dear Yoko and Florent,
+
+Thank you so very much for these two days. The time I spent surrounded by your warm energy and gentle presence has left a deep impression on my heart.
+
+I was able to fully relax and feel safe, and it felt as though not only my body, but even my soul, was being healed.
+
+I truly look forward to the day we meet again. Please take good care of yourselves, and continue to bring healing to many others.
+
+With heartfelt gratitude.`,
+              },
+            ],
+          },
+          {
+            title: "A Dreamlike Day at Itako — Experiencing Purnā",
+            sections: [
+              {
+                title: "",
+                content: `Good evening!
+
+I'm so happy you enjoyed the bread🍞 that much! 😄 I'm sure the bread🍞 made into a delicious sandwich with avocado, tomato, and mustard is happy too! ✨️
+
+Yesterday truly felt like a "dreamlike day." Meeting Yoko-san and Florent, visiting the place called Itako for the first time (the waterways and the thatched-roof Chokyoji Temple were so mystical! The autumn leaves were beautiful too 🍁), that wonderful retreat in the charming old house ✨️ Everything felt like another world, and that indescribable, blissful feeling from the retreat... I was enveloped in pure happiness. Even today, a day later, I'm still wrapped in this soft, happy feeling, like I'm still dreaming. Is this what experiencing Purnā feels like? I was able to savor a deeply fulfilled sensation.
+
+As yoga and meditation gradually deepened the liberation and purification of my mind and body, it was also wonderful that Yoko and Florent took such sincere time between sessions to listen to what was troubling me right now. Enjoying delicious homemade juices from the liquid diet while having fun conversations was also fantastic. Talking helped me feel liberated, and my trust in both of them deepened significantly, making me feel much closer to them. The room in the old house was filled with gentle energy.
+
+Through Banyan Tree meditation and mantras, I felt myself steadily entering deeper within, sensing my being aligning and settling.
+
+And the main event was undoubtedly Florent's wholehearted Puja!
+
+Beautiful tools, radiating spirituality even just to behold, were prepared, and the ceremony began using them and flowers.
+
+Florent, a former Hindu monk, truly shone here ✨️. Though it was my first time witnessing a puja, he chanted extensively in Hindi??, guiding us who understood nothing with such confidence and reliability.
+
+The ritual to open the third eye was profoundly sacred and magnificent. Such an experience is rare, and I sincerely hope many others can partake in it. I decided to attend the retreat at the last minute, and I want to pat myself on the back for acting on that "I want to go!" impulse!
+
+And the Third Eye Healing that followed was also incredible!
+
+Yoko and Florent performed the healing together, and I was shocked when my forehead started tingling intensely! The power was so strong, my forehead felt pushed by the energy, almost pulling my head back. The area around my pineal gland started spinning, making my whole head feel like it was about to whirl. I distinctly felt the sensation of receiving this power!
+
+Florent's reading afterward was incredible too. He gave me words that gave me courage and brilliantly pointed out things I'd been avoiding and keeping bottled up. Both Yoko and Florent genuinely cared and thought about solutions with me; they're so kind 😭
+
+They're such a perfectly in-sync couple, both filled with deep, warm love! Age difference?? You'd never sense it at all—they're such a lovely, adorable pair, so perfectly suited for each other~ 💖
+
+Finally, the two of them gave me a hug, and it was so warm 😭. I realized I'd been struggling alone for so long, and honestly, feeling human warmth again after so long made me want to cry.
+
+I'm so grateful for this connection that started unexpectedly on TikTok. It was such a wonderful retreat, and I hope your activities like this thrive and grow even bigger, both in Japan and Paris 🌍
+
+I'll always be rooting for your happiness and success from the bottom of my heart (happy) Stay happy even when you're in Paris 💞
+
+Thank you so much for everything this time 😊`,
+              },
+            ],
+          },
+          {
+            title:
+              "Reflections on Participating in the Third Eye Activation Retreat",
+            sections: [
+              {
+                title: "",
+                content: `My reason for joining this retreat was a desire to further enhance my spiritual abilities. Having actually participated, I feel a deep sense of satisfaction, as if I've taken a solid step forward.
+
+First, I was truly delighted to meet Yoko-san and her partner Florent in person. The atmosphere they created was warm, offering a reassuring sense of welcome. The venue, a traditional Japanese house, felt very open and airy, naturally calming my mind.
+
+The sessions—yoga, meditation, liquid diet—were all experiences I hadn't had much exposure to before, making it a very educational experience. Particularly memorable was the meditation under the banyan tree. During the meditation, I saw myself existing as a tree amidst various landscapes: people dancing in a circle around the tree, walking clockwise around it, and scenes from places I'd lived before moving—an island in Okinawa, Mount Hakusan in Ishikawa. It was a wonderfully strange and pleasant experience.
+
+I was also deeply grateful for the knee healing Florent provided.
+
+I plan to start practicing the "things to do going forward" you taught us right away.
+
+Morning warm water
+
+Lemon juice (water + lemon + spices)
+
+Haritaki
+
+Yoga (within my ability)
+
+Casual meditation
+
+Liquid diet
+
+Salt bath
+
+Reducing meat, fish, and dairy
+
+The walk to the refreshing temple, away from Tokyo's bustle, was also a truly cleansing experience for the soul.
+
+I'm so glad I could participate in this retreat.
+
+Thank you for the wonderful time.`,
+              },
+            ],
+          },
+        ],
+        ja: [
+          {
+            title: "第三の目を開く — 心と体を解き放つリトリート",
+            sections: [
+              {
+                title: "振り返り",
+                days: [
+                  {
+                    day: "🌿 1日目",
+                    content: `初めてお二人にお会いしたのは、それまで写真でしか見たことのなかった時でした。初対面にもかかわらず、まったく違和感はありませんでした。むしろ、深い親しみやすさと安心感があり、まるで旧友と再会したかのようでした。
+
+その日、私はヨーコさんのご自宅でヨガを体験しました。腰痛を考慮して、彼女は私の体に安全で快適なポーズを優しく導いてくれました。少しずつ、心と体の両方がリラックスし始め、深い安らぎに包まれました。
+
+その後、第三の目ヒーリングへと移りました。お二人が導くヒーリングセッション中、私は自然に深い瞑想状態に入りました。頭がとても温かくなり、体が2回震え、ほとんど崩れ落ちそうになるほど強いエネルギーの流れを感じましたが、ヨーコさんが優しく支えてくれました。
+
+ヒーリングが終わると、心の中の乱れが静まり、穏やかな海のように静かで平和になりました。心が突然軽くなったような、神秘的なけれど温かい感覚でした。
+
+そして驚くことに、長い間悩まされていた腰痛が消えていました。心と体の深いつながりを本当に感じました。`,
+                  },
+                  {
+                    day: "🌙 2日目",
+                    content: `2日目は、潮来市の旧家「磯山亭」で過ごしました。午前中は、そこへ向かう前に鹿島神宮を訪れて心を整えました。磯山亭はとても静かで美しい場所で、個人的に気に入りました。
+
+ヒーリングが始まると、再び深い瞑想状態に入りました。ヒーリングが始まると、頭の周辺が熱くなり、体が震え始めました。そして、上から降りてくる白い光の柱のようなものを感じ、強力な衝撃を伴いました—まるで頭から何かが突然引き抜かれたかのようでした。
+
+その後、白い膜に囲まれ、オレンジ色の人の形をした光の線に囲まれているように感じました。呼吸が非常に深くなり、自然に低く響く音を発していることに気づきました。少し驚かせてしまったかもしれませんが、意識自体は非常に穏やかで平和でした。
+
+ヒーリングが終わると、心も体も完全にリフレッシュしたように感じました。何が起こったのだろうと自分自身に思うほど、神秘的な体験でした。
+
+私は常にかなり敏感でしたが、この体験は本当に特別でした—言葉では完全に表現できないほど深いものでした。
+
+「他に何か聞きたいことはありますか？」と尋ねられたとき、すでに必要なものはすべて受け取ったと感じました。
+
+家に帰り、翌日に達したとき、全身がまだ光に包まれているように感じ、今でもその優しい余韻が続いています。`,
+                  },
+                ],
+                conclusion: `✨ まとめ
+
+この2日間は、私にとって本当に神秘的で忘れられないものでした。今でも、感覚がこれまで以上に鋭く、明確になり、しっかりと地に足がついていると感じています。
+
+ヨーコさん、フロランさん、この2日間、素晴らしいケアをありがとうございました。お二人のおかげで、心と体が深く癒され、これまでに知らなかった貴重な体験をさせていただきました。
+
+常に敏感でしたが、このような体験は完全に新しいものでした。そして、心は感謝の気持ちで満たされています。
+
+この出会いを大切にし、これからの人生の指針として携えていきます。
+
+心から感謝いたします。`,
+                signature: `💐 感謝のメッセージ
+
+親愛なるヨーコさん、フロランさんへ
+
+この2日間、本当にありがとうございました。お二人の温かいエネルギーと優しい存在に囲まれて過ごした時間は、私の心に深い印象を残しました。
+
+完全にリラックスし、安全を感じることができ、体だけでなく、魂までもが癒されているように感じました。
+
+またお会いできる日を心から楽しみにしています。どうかお体を大切にし、多くの人々にヒーリングを届け続けてください。
+
+心から感謝を込めて。`,
+              },
+            ],
+          },
+          {
+            title: "潮来での夢のような一日 — プルナー体験",
+            sections: [
+              {
+                title: "",
+                content: `こんばんは！
+
+パン🍞をそんなに気に入ってくださって本当に嬉しいです！😄 アボカドとトマト、マスタードを挟んだ美味しいサンドイッチになったパン🍞もきっと嬉しいはずです✨️
+
+昨日は本当に「夢のような一日」でした。ヨーコさんとフロランにお会いできたこと、初めて訪れた潮来という場所（水路と茅葺きの長享寺はとても神秘的でした！紅葉も美しかったです🍁）、あの魅力的な古民家での素晴らしいリトリート✨️ すべてが別世界のようで、リトリートから得たあの言葉では言い表せない至福の感覚...純粋な幸せに包まれました。今日になっても、一日経った今でも、まだ夢を見ているかのように、この柔らかく幸せな感覚に包まれています。これがプルナーを体験することなのでしょうか？深く満たされた感覚を味わうことができました。
+
+ヨガと瞑想が心と体の解放と浄化を徐々に深めていく中で、セッションの合間に、ヨーコとフロランが今私を悩ませていることを真摯に聞いてくれたのも素晴らしかったです。流動食の美味しい手作りジュースを飲みながら楽しくお話しするのも本当に素敵でした。話すことで解放感を感じ、お二人への信頼も大きく深まり、ずっと近く感じられるようになりました。古民家の部屋は優しいエネルギーに満ちていました。
+
+バニヤンツリーの瞑想とマントラを通じて、自分が確実に内側のより深いところに入っていき、自分自身が整い、落ち着いていくのを感じました。
+
+そして、メインイベントは間違いなくフローランの心を込めたプージャでした！
+
+見るだけでもスピリチュアルさを放つ美しい道具が用意され、それらと花を使って儀式が始まりました。
+
+元ヒンドゥー僧侶のフローランは、ここで本当に輝いていました✨️。プージャを目にするのは初めてでしたが、何も理解できない私たちを、ヒンディー語で長々と唱えながら、そんなにも自信と信頼性をもって導いてくれました。
+
+第三の目を開く儀式は深く神聖で壮大でした。このような体験は珍しく、心から多くの人が参加できることを願っています。最後の最後でリトリートに参加することを決め、「行きたい！」という衝動に従った自分を褒めてあげたいです！
+
+そして、その後に続いた第三の目ヒーリングも信じられないほど素晴らしかったです！
+
+ヨーコとフロランが一緒にヒーリングを行い、おでこが激しくピリピリし始めたとき、私は驚きました！力がとても強く、おでこがエネルギーに押され、ほとんど頭が後ろに引っ張られるような感じでした。松果体の周辺が回転し始め、頭全体が回転しそうな感じになりました。この力を受け取る感覚をはっきりと感じました！
+
+その後に行われたフローランのリーディングも素晴らしかったです。彼は私に勇気を与える言葉をくれて、私が避け続けて心の中に閉じ込めていたことを見事に指摘してくれました。ヨーコとフローランの両方が本気で気にかけてくれて、一緒に解決策を考えてくれました。お二人は本当に優しいです😭
+
+完璧に息の合ったカップルで、どちらも深く温かい愛に満ちています！年齢差？？まったく感じられません—こんなにも愛らしく、お互いに完璧に合った素敵なペアです~ 💖
+
+最後に、お二人が抱きしめてくれて、それはとても温かかったです😭。私は長い間一人で苦しんでいたことに気づき、正直なところ、久しぶりに人の温かさを感じて、泣きそうになりました。
+
+予想外にTikTokで始まったこのつながりに本当に感謝しています。こんなに素晴らしいリトリートで、日本とパリの両方で、このような活動がさらに繁栄し、大きくなっていくことを願っています🌍
+
+心からお二人の幸せと成功をいつも応援しています（幸せ）パリにいても幸せでいてください💞
+
+今回は本当にありがとうございました😊`,
+              },
+            ],
+          },
+          {
+            title: "第三の目活性化リトリート参加の振り返り",
+            sections: [
+              {
+                title: "",
+                content: `このリトリートに参加した理由は、自分のスピリチュアルな能力をさらに高めたいという思いからでした。実際に参加してみて、しっかりと前進する一歩を踏み出せたような、深い満足感を感じています。
+
+まず、ヨーコさんとパートナーのフロランに直接お会いできて、本当に嬉しかったです。お二人が創り出してくれた雰囲気は温かく、安心感のある歓迎の気持ちを感じさせてくれました。会場となった日本の伝統的な家は、とても開放感があり、自然と心が落ち着きました。
+
+セッション—ヨガ、瞑想、流動食—はすべて、それまであまり経験のなかった体験で、とても勉強になる経験でした。特に印象的だったのは、バニヤンツリーの下での瞑想です。瞑想中、私は自分自身がさまざまな風景の中に存在する木として見えました：木の周りを円になって踊る人々、時計回りに歩く人々、そして引っ越す前に住んでいた場所のシーン—沖縄の島、石川の白山。それは素晴らしく奇妙で心地よい体験でした。
+
+フロランが提供してくれた膝のヒーリングにも深く感謝しています。
+
+これから実践する「これからやるべきこと」を、教えていただいた通りにすぐに始める予定です。
+
+朝の温かい水
+
+レモンジュース（水 + レモン + スパイス）
+
+ハリタキ
+
+ヨガ（自分の能力の範囲で）
+
+カジュアルな瞑想
+
+流動食
+
+塩風呂
+
+肉、魚、乳製品を減らす
+
+東京の喧騒から離れた、さわやかなお寺への散歩も、魂にとって本当に浄化される体験でした。
+
+このリトリートに参加できて本当に良かったです。
+
+素晴らしい時間をありがとうございました。`,
+              },
+            ],
+          },
+        ],
+      };
+
+      // Detect language (default to English if Japanese is not detected)
+      function detectLanguage() {
+        const browserLang = navigator.language || navigator.userLanguage;
+        if (browserLang.startsWith("ja")) {
+          return "ja";
+        }
+        return "en";
+      }
+
+      let currentLang = detectLanguage();
+      let currentSlide = 0;
+
+      // Convert text with line breaks to paragraphs
+      function formatTextToParagraphs(text) {
+        if (!text) return "";
+
+        const lines = text.split("\n");
+        const paragraphs = [];
+        let currentParagraph = [];
+
+        lines.forEach((line, index) => {
+          const trimmed = line.trim();
+
+          if (trimmed === "") {
+            // Empty line - close current paragraph if it has content
+            if (currentParagraph.length > 0) {
+              paragraphs.push(currentParagraph.join(" "));
+              currentParagraph = [];
+            }
+          } else {
+            // Non-empty line - add to current paragraph
+            currentParagraph.push(trimmed);
+          }
+        });
+
+        // Don't forget the last paragraph if it exists
+        if (currentParagraph.length > 0) {
+          paragraphs.push(currentParagraph.join(" "));
+        }
+
+        // If no paragraphs were created (all empty lines), return empty string
+        if (paragraphs.length === 0) {
+          return "";
+        }
+
+        // Wrap each paragraph in <p> tags
+        return paragraphs.map((p) => `<p>${p}</p>`).join("");
+      }
+
+      // Update language selector to match detected language
+      function updateLanguageSelector() {
+        const selector = document.getElementById("languageSelect");
+        if (selector) {
+          selector.value = currentLang;
+        }
+      }
+
+      // Change language and reload carousel
+      function changeLanguage(newLang) {
+        if (newLang !== currentLang && (newLang === "en" || newLang === "ja")) {
+          currentLang = newLang;
+          currentSlide = 0; // Reset to first slide when changing language
+          initCarousel();
+          // Update HTML lang attribute
+          document.documentElement.lang = newLang === "ja" ? "ja" : "en";
+        }
+      }
+
+      // Initialize carousel
+      function initCarousel() {
+        const track = document.getElementById("carouselTrack");
+        const indicators = document.getElementById("indicators");
+        const status = document.getElementById("carouselStatus");
+        const testimonialsData = testimonials[currentLang];
+
+        // Clear existing content
+        track.innerHTML = "";
+        indicators.innerHTML = "";
+
+        // Create slides
+        testimonialsData.forEach((testimonial, index) => {
+          const slide = document.createElement("div");
+          slide.className = `testimonial-slide ${index === 0 ? "active" : ""}`;
+          slide.setAttribute("role", "listitem");
+          slide.setAttribute("aria-hidden", index !== 0 ? "true" : "false");
+
+          let html = `<div class="testimonial-content">
+                    <h2 class="testimonial-title">${testimonial.title}</h2>`;
+
+          testimonial.sections.forEach((section) => {
+            html += `<div class="testimonial-section">`;
+
+            if (section.title) {
+              html += `<h3 class="testimonial-section-title">${section.title}</h3>`;
+            }
+
+            // Handle structure with days (first testimonial format)
+            if (section.days && Array.isArray(section.days)) {
+              section.days.forEach((dayData) => {
+                html += `<div class="testimonial-day">${dayData.day}</div>
+                          <div class="testimonial-text">${formatTextToParagraphs(
+                            dayData.content
+                          )}</div>`;
+              });
+
+              if (section.conclusion) {
+                html += `<div class="testimonial-text">${formatTextToParagraphs(
+                  section.conclusion
+                )}</div>`;
+              }
+
+              if (section.signature) {
+                html += `<div class="testimonial-signature">${formatTextToParagraphs(
+                  section.signature
+                )}</div>`;
+              }
+            }
+            // Handle structure with content (second testimonial format)
+            else if (section.content) {
+              html += `<div class="testimonial-text">${formatTextToParagraphs(
+                section.content
+              )}</div>`;
+            }
+
+            html += `</div>`;
+          });
+
+          html += `</div>`;
+          slide.innerHTML = html;
+          track.appendChild(slide);
+
+          // Create indicator
+          const indicator = document.createElement("button");
+          indicator.className = `carousel-indicator ${
+            index === 0 ? "active" : ""
+          }`;
+          indicator.setAttribute("role", "tab");
+          indicator.setAttribute(
+            "aria-selected",
+            index === 0 ? "true" : "false"
+          );
+          indicator.setAttribute("aria-controls", `slide-${index}`);
+          indicator.setAttribute("tabindex", index === 0 ? "0" : "-1");
+          indicator.setAttribute("id", `indicator-${index}`);
+          indicator.addEventListener("click", () => goToSlide(index));
+          indicators.appendChild(indicator);
+        });
+
+        updateCarousel();
+      }
+
+      // Update carousel state
+      function updateCarousel() {
+        const slides = document.querySelectorAll(".testimonial-slide");
+        const indicators = document.querySelectorAll(".carousel-indicator");
+        const status = document.getElementById("carouselStatus");
+        const prevButton = document.getElementById("prevButton");
+        const nextButton = document.getElementById("nextButton");
+
+        slides.forEach((slide, index) => {
+          const isActive = index === currentSlide;
+          slide.classList.toggle("active", isActive);
+          slide.setAttribute("aria-hidden", !isActive ? "true" : "false");
+        });
+
+        indicators.forEach((indicator, index) => {
+          const isActive = index === currentSlide;
+          indicator.classList.toggle("active", isActive);
+          indicator.setAttribute("aria-selected", isActive ? "true" : "false");
+          indicator.setAttribute("tabindex", isActive ? "0" : "-1");
+        });
+
+        // Update status for screen readers
+        status.textContent = `${currentSlide + 1} / ${slides.length}`;
+
+        // Update button states
+        prevButton.disabled = currentSlide === 0;
+        nextButton.disabled = currentSlide === slides.length - 1;
+      }
+
+      // Navigate to specific slide
+      function goToSlide(index) {
+        const slides = document.querySelectorAll(".testimonial-slide");
+        if (index >= 0 && index < slides.length) {
+          currentSlide = index;
+          updateCarousel();
+        }
+      }
+
+      // Next slide
+      function nextSlide() {
+        const slides = document.querySelectorAll(".testimonial-slide");
+        if (currentSlide < slides.length - 1) {
+          currentSlide++;
+          updateCarousel();
+        }
+      }
+
+      // Previous slide
+      function prevSlide() {
+        if (currentSlide > 0) {
+          currentSlide--;
+          updateCarousel();
+        }
+      }
+
+      // Keyboard navigation
+      function handleKeyDown(e) {
+        switch (e.key) {
+          case "ArrowLeft":
+            e.preventDefault();
+            prevSlide();
+            break;
+          case "ArrowRight":
+            e.preventDefault();
+            nextSlide();
+            break;
+          case "Home":
+            e.preventDefault();
+            goToSlide(0);
+            break;
+          case "End":
+            e.preventDefault();
+            const slides = document.querySelectorAll(".testimonial-slide");
+            goToSlide(slides.length - 1);
+            break;
+        }
+      }
+
+      // Initialize on load
+      document.addEventListener("DOMContentLoaded", () => {
+        // Set initial language selector value
+        updateLanguageSelector();
+
+        // Add language change listener
+        const languageSelect = document.getElementById("languageSelect");
+        if (languageSelect) {
+          languageSelect.addEventListener("change", (e) => {
+            changeLanguage(e.target.value);
+          });
+        }
+
+        initCarousel();
+
+        // Add event listeners
+        document
+          .getElementById("nextButton")
+          .addEventListener("click", nextSlide);
+        document
+          .getElementById("prevButton")
+          .addEventListener("click", prevSlide);
+
+        // Keyboard navigation
+        document.addEventListener("keydown", handleKeyDown);
+
+        // Focus management for accessibility
+        const carouselWrapper = document.querySelector(".carousel-wrapper");
+        carouselWrapper.setAttribute("tabindex", "0");
+
+        // Update HTML lang attribute based on detected language
+        document.documentElement.lang = currentLang === "ja" ? "ja" : "en";
+      });
+    </script>
+  </body>
+</html>
