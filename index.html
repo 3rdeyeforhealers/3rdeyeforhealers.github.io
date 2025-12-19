@@ -318,7 +318,7 @@
         aria-label="Testimonials carousel"
       >
         <div class="carousel-container">
-          <div class="carousel-track" id="carouselTrack" role="list">
+          <div class="carousel-track" id="carouselTrack">
             <!-- Testimonials will be dynamically inserted here -->
           </div>
         </div>
@@ -341,7 +341,6 @@
           <div
             class="carousel-indicators"
             id="indicators"
-            role="tablist"
             aria-label="Testimonial navigation"
           ></div>
           <button
@@ -732,7 +731,6 @@ Thank you for the wonderful time.`,
         testimonialsData.forEach((testimonial, index) => {
           const slide = document.createElement("div");
           slide.className = `testimonial-slide ${index === 0 ? "active" : ""}`;
-          slide.setAttribute("role", "listitem");
           slide.setAttribute("aria-hidden", index !== 0 ? "true" : "false");
 
           let html = `<div class="testimonial-content">
@@ -785,13 +783,11 @@ Thank you for the wonderful time.`,
           indicator.className = `carousel-indicator ${
             index === 0 ? "active" : ""
           }`;
-          indicator.setAttribute("role", "tab");
           indicator.setAttribute(
             "aria-selected",
             index === 0 ? "true" : "false"
           );
           indicator.setAttribute("aria-controls", `slide-${index}`);
-          indicator.setAttribute("tabindex", index === 0 ? "0" : "-1");
           indicator.setAttribute("id", `indicator-${index}`);
           indicator.addEventListener("click", () => goToSlide(index));
           indicators.appendChild(indicator);
@@ -818,7 +814,6 @@ Thank you for the wonderful time.`,
           const isActive = index === currentSlide;
           indicator.classList.toggle("active", isActive);
           indicator.setAttribute("aria-selected", isActive ? "true" : "false");
-          indicator.setAttribute("tabindex", isActive ? "0" : "-1");
         });
 
         // Update status for screen readers
@@ -909,10 +904,6 @@ Thank you for the wonderful time.`,
 
         // Keyboard navigation
         document.addEventListener("keydown", handleKeyDown);
-
-        // Focus management for accessibility
-        const carouselWrapper = document.querySelector(".carousel-wrapper");
-        carouselWrapper.setAttribute("tabindex", "0");
 
         // Update HTML lang attribute based on detected language
         document.documentElement.lang = currentLang === "ja" ? "ja" : "en";
