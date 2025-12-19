@@ -894,9 +894,9 @@ Thank you for the wonderful time.`,
         const screenReaderText = translations.testimonialStatus(current, total);
         status.innerHTML = `<p><span aria-hidden="true">${visualText}</span> <span class="sr-only">${screenReaderText}</span></p>`;
 
-        // Update button states
-        prevButton.disabled = currentSlide === 0;
-        nextButton.disabled = currentSlide === slides.length - 1;
+        // Update button states (never disabled since carousel loops)
+        prevButton.disabled = false;
+        nextButton.disabled = false;
       }
 
       // Navigate to specific slide
@@ -910,25 +910,22 @@ Thank you for the wonderful time.`,
         }
       }
 
-      // Next slide
+      // Next slide (loops to first slide after last)
       function nextSlide() {
         const slides = document.querySelectorAll(".testimonial-slide");
-        if (currentSlide < slides.length - 1) {
-          currentSlide++;
-          updateCarousel();
-          // Scroll to top
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateCarousel();
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
-      // Previous slide
+      // Previous slide (loops to last slide before first)
       function prevSlide() {
-        if (currentSlide > 0) {
-          currentSlide--;
-          updateCarousel();
-          // Scroll to top
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+        const slides = document.querySelectorAll(".testimonial-slide");
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        updateCarousel();
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
       // Keyboard navigation
