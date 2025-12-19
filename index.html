@@ -302,12 +302,10 @@
   <body>
     <div class="container">
       <div class="language-selector">
-        <label for="languageSelect" class="sr-only">Select language</label>
-        <select
-          id="languageSelect"
-          class="language-select"
-          aria-label="Select language"
+        <label for="languageSelect" id="languageLabel" class="sr-only"
+          >Select language</label
         >
+        <select id="languageSelect" class="language-select">
           <option value="en">English</option>
           <option value="ja">日本語</option>
         </select>
@@ -658,6 +656,62 @@ Thank you for the wonderful time.`,
       let currentLang = detectLanguage();
       let currentSlide = 0;
 
+      // Translations for aria-labels
+      const ariaLabels = {
+        en: {
+          selectLanguage: "Select language",
+          testimonialsCarousel: "Testimonials carousel",
+          previousTestimonial: "Previous testimonial",
+          nextTestimonial: "Next testimonial",
+          testimonialNavigation: "Testimonial navigation",
+        },
+        ja: {
+          selectLanguage: "言語を選択",
+          testimonialsCarousel: "お客様の声カルーセル",
+          previousTestimonial: "前のお客様の声",
+          nextTestimonial: "次のお客様の声",
+          testimonialNavigation: "お客様の声ナビゲーション",
+        },
+      };
+
+      // Update all aria-labels based on current language
+      function updateAriaLabels() {
+        const labels = ariaLabels[currentLang];
+
+        // Update language label text
+        const languageLabel = document.getElementById("languageLabel");
+        if (languageLabel) {
+          languageLabel.textContent = labels.selectLanguage;
+        }
+
+        // Update carousel wrapper
+        const carouselWrapper = document.querySelector(".carousel-wrapper");
+        if (carouselWrapper) {
+          carouselWrapper.setAttribute(
+            "aria-label",
+            labels.testimonialsCarousel
+          );
+        }
+
+        // Update previous button
+        const prevButton = document.getElementById("prevButton");
+        if (prevButton) {
+          prevButton.setAttribute("aria-label", labels.previousTestimonial);
+        }
+
+        // Update next button
+        const nextButton = document.getElementById("nextButton");
+        if (nextButton) {
+          nextButton.setAttribute("aria-label", labels.nextTestimonial);
+        }
+
+        // Update indicators
+        const indicators = document.getElementById("indicators");
+        if (indicators) {
+          indicators.setAttribute("aria-label", labels.testimonialNavigation);
+        }
+      }
+
       // Convert text with line breaks to paragraphs
       function formatTextToParagraphs(text) {
         if (!text) return "";
@@ -708,6 +762,7 @@ Thank you for the wonderful time.`,
         if (newLang !== currentLang && (newLang === "en" || newLang === "ja")) {
           currentLang = newLang;
           currentSlide = 0; // Reset to first slide when changing language
+          updateAriaLabels(); // Update aria-labels for new language
           initCarousel();
           // Update HTML lang attribute
           document.documentElement.lang = newLang === "ja" ? "ja" : "en";
@@ -883,6 +938,9 @@ Thank you for the wonderful time.`,
       document.addEventListener("DOMContentLoaded", () => {
         // Set initial language selector value
         updateLanguageSelector();
+
+        // Update aria-labels for initial language
+        updateAriaLabels();
 
         // Add language change listener
         const languageSelect = document.getElementById("languageSelect");
