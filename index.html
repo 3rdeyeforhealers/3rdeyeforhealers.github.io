@@ -665,6 +665,8 @@ Thank you for the wonderful time.`,
           nextTestimonial: "Next testimonial",
           testimonialNavigation: "Testimonial navigation",
           pageTitle: "Third Eye for Healers - Testimonials",
+          testimonialStatus: (current, total) =>
+            `Testimonial ${current} out of ${total}`,
         },
         ja: {
           selectLanguage: "言語を選択",
@@ -673,6 +675,8 @@ Thank you for the wonderful time.`,
           nextTestimonial: "次のお客様の声",
           testimonialNavigation: "お客様の声ナビゲーション",
           pageTitle: "第三の目ヒーラー - お客様の声",
+          testimonialStatus: (current, total) =>
+            `お客様の声 ${current} / ${total}`,
         },
       };
 
@@ -883,7 +887,12 @@ Thank you for the wonderful time.`,
         });
 
         // Update status for screen readers
-        status.textContent = `${currentSlide + 1} / ${slides.length}`;
+        const translations = uiTranslations[currentLang];
+        const current = currentSlide + 1;
+        const total = slides.length;
+        const visualText = `${current} / ${total}`;
+        const screenReaderText = translations.testimonialStatus(current, total);
+        status.innerHTML = `<p><span aria-hidden="true">${visualText}</span> <span class="sr-only">${screenReaderText}</span></p>`;
 
         // Update button states
         prevButton.disabled = currentSlide === 0;
