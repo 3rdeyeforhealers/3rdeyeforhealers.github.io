@@ -89,7 +89,7 @@
 
       .testimonial-day {
         font-size: 1.1em;
-        margin-bottom: 20px;
+        margin: 0 0 20px 0;
         color: #555;
         font-weight: 500;
       }
@@ -748,7 +748,7 @@ Thank you for the wonderful time.`,
             // Handle structure with days (first testimonial format)
             if (section.days && Array.isArray(section.days)) {
               section.days.forEach((dayData) => {
-                html += `<div class="testimonial-day">${dayData.day}</div>
+                html += `<p class="testimonial-day">${dayData.day}</p>
                           <div class="testimonial-text">${formatTextToParagraphs(
                             dayData.content
                           )}</div>`;
