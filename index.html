@@ -54,10 +54,16 @@
         min-width: 100%;
         padding: 60px 50px;
         display: none;
+        outline: none;
       }
 
       .testimonial-slide.active {
         display: block;
+      }
+
+      .testimonial-slide:focus {
+        outline: 3px solid #ffd700;
+        outline-offset: -3px;
       }
 
       .testimonial-content {
@@ -824,6 +830,7 @@ Thank you for the wonderful time.`,
           slide.setAttribute("role", "group");
           slide.setAttribute("aria-roledescription", "slide");
           slide.setAttribute("aria-hidden", index !== 0 ? "true" : "false");
+          slide.setAttribute("tabindex", "-1"); // Make focusable for programmatic focus
 
           // Set accessible label for slide with position information
           const slideTranslations = uiTranslations[currentLang];
@@ -945,6 +952,18 @@ Thank you for the wonderful time.`,
         nextButton.disabled = false;
       }
 
+      // Focus on the current slide content
+      function focusSlide() {
+        const slides = document.querySelectorAll(".testimonial-slide");
+        const currentSlideElement = slides[currentSlide];
+        if (currentSlideElement) {
+          // Use setTimeout to ensure DOM is updated
+          setTimeout(() => {
+            currentSlideElement.focus();
+          }, 100);
+        }
+      }
+
       // Navigate to specific slide
       function goToSlide(index) {
         const slides = document.querySelectorAll(".testimonial-slide");
@@ -953,6 +972,8 @@ Thank you for the wonderful time.`,
           updateCarousel();
           // Scroll to top
           window.scrollTo({ top: 0, behavior: "smooth" });
+          // Focus on the slide
+          focusSlide();
         }
       }
 
@@ -963,6 +984,8 @@ Thank you for the wonderful time.`,
         updateCarousel();
         // Scroll to top
         window.scrollTo({ top: 0, behavior: "smooth" });
+        // Focus on the new slide
+        focusSlide();
       }
 
       // Previous slide (loops to last slide before first)
@@ -972,6 +995,8 @@ Thank you for the wonderful time.`,
         updateCarousel();
         // Scroll to top
         window.scrollTo({ top: 0, behavior: "smooth" });
+        // Focus on the new slide
+        focusSlide();
       }
 
       // Keyboard navigation
