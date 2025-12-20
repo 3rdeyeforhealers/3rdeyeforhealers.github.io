@@ -907,6 +907,11 @@ Thank you for the wonderful time.`,
             indicator.setAttribute("aria-disabled", "true");
           }
           indicator.addEventListener("click", () => goToSlide(index));
+          indicator.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              window.scrollTo({ top: 0, behavior: scrollBehavior });
+            }
+          });
           indicators.appendChild(indicator);
         });
 
@@ -964,6 +969,12 @@ Thank you for the wonderful time.`,
           // Use setTimeout to ensure DOM is updated
           setTimeout(() => {
             currentSlideElement.focus();
+            // Use requestAnimationFrame to ensure scroll happens after any browser scroll from focus
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                window.scrollTo({ top: 0, behavior: scrollBehavior });
+              });
+            });
           }, 100);
         }
       }
@@ -986,9 +997,9 @@ Thank you for the wonderful time.`,
         const slides = document.querySelectorAll(".testimonial-slide");
         currentSlide = (currentSlide + 1) % slides.length;
         updateCarousel();
-        // Scroll to top
+        // Scroll to top immediately
         window.scrollTo({ top: 0, behavior: scrollBehavior });
-        // Focus on the new slide
+        // Focus on the new slide (which will also scroll to top after focus)
         focusSlide();
       }
 
@@ -997,9 +1008,9 @@ Thank you for the wonderful time.`,
         const slides = document.querySelectorAll(".testimonial-slide");
         currentSlide = (currentSlide - 1 + slides.length) % slides.length;
         updateCarousel();
-        // Scroll to top
+        // Scroll to top immediately
         window.scrollTo({ top: 0, behavior: scrollBehavior });
-        // Focus on the new slide
+        // Focus on the new slide (which will also scroll to top after focus)
         focusSlide();
       }
 
@@ -1045,12 +1056,22 @@ Thank you for the wonderful time.`,
         initCarousel();
 
         // Add event listeners
-        document
-          .getElementById("nextButton")
-          .addEventListener("click", nextSlide);
-        document
-          .getElementById("prevButton")
-          .addEventListener("click", prevSlide);
+        const nextButton = document.getElementById("nextButton");
+        const prevButton = document.getElementById("prevButton");
+        
+        nextButton.addEventListener("click", nextSlide);
+        nextButton.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            window.scrollTo({ top: 0, behavior: scrollBehavior });
+          }
+        });
+        
+        prevButton.addEventListener("click", prevSlide);
+        prevButton.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            window.scrollTo({ top: 0, behavior: scrollBehavior });
+          }
+        });
 
         // Keyboard navigation (use passive listener where possible)
         document.addEventListener("keydown", handleKeyDown, false);
